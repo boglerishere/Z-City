@@ -42,10 +42,10 @@ SWEP.FakeViewBobBaseBone = "ValveBiped.Bip01_R_UpperArm"
 SWEP.ViewPunchDiv = 50
 
 SWEP.internalholo = Vector(15, 0, 0)
-SWEP.holo = Material("holosights/dot.png")
+SWEP.holo = Material("effects/sun_textures/birthshock")
 SWEP.colorholo = Color(79, 255, 255)
-SWEP.internalholosize = 0.5
-SWEP.holo_size = 0.25
+SWEP.internalholosize = 0.8
+SWEP.holo_size = 0.5
 
 if CLIENT then
 	SWEP.FakeReloadEvents = {
@@ -64,7 +64,9 @@ if CLIENT then
 			if self:Clip1() < 1 then
 
 				self:GetWM():ManipulateBoneScale(1, vector_full)
-			end
+			else
+
+			end 
 			self.AnimList["idle"] = "idle"
 			self.AnimList["reload"] = "reload"
 		end,

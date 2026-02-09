@@ -81,7 +81,7 @@ function CLASS.On(self)
 		self:SetSubMaterial(0, fallbackMat)
 
 		if SERVER then
-			if not table.IsEmpty(clothTbl) then
+			if not table.IsEmpty(clothTbl) and self.PreZombClass ~= "Rebel" then
 				self:SetSubMaterial(self:GetSubMaterialIdByName("distac/gloves/players_sheet"), hg.Appearance.Clothes[1][clothTbl["main"]])
 				self:SetSubMaterial(self:GetSubMaterialIdByName("distac/gloves/pants"), hg.Appearance.Clothes[1][clothTbl["pants"]])
 				self:SetSubMaterial(self:GetSubMaterialIdByName("distac/gloves/cross"), hg.Appearance.Clothes[1][clothTbl["boots"]])
@@ -103,7 +103,7 @@ function CLASS.On(self)
 			self.organism.disorientation = 2
 			self.organism.otrub = false
 			self.organism.needotrub = false
-			self.organism.painadd = -5
+			self.organism.painadd = -10
 		end
 
 		if IsValid(self) and not IsValid(self.FakeRagdoll) then
@@ -134,6 +134,16 @@ function CLASS.On(self)
 				end
 			end
 		end)
+
+		--\\ Remove armor
+		local armors = self:GetNetVar("Armor",{})
+		if armors["head"] and !hg.armor["head"][armors["head"]].nodrop then
+			hg.DropArmorForce(self, armors["head"])
+		end
+
+		if armors["face"] and !hg.armor["face"][armors["face"]].nodrop then
+			hg.DropArmorForce(self, armors["face"])
+		end
 
 		--\\ Give hands if we don't have it
 		if self:HasWeapon("weapon_hands_sh") then
