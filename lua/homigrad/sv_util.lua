@@ -1541,7 +1541,7 @@ hook.Add("Org Think", "BodyTemperature", function(owner, org, timeValue) -- пе
 	local currentPulse = org.pulse or 70
 	local pulseHeat = 0
 	local temp = hg.MapTemps[game.GetMap()] or 20
-	
+
 	if currentPulse > 80 then
 		local pulseMultiplier = math.min((currentPulse - 70) / 100, 1.2)
 		pulseHeat = timeValue / 50 * pulseMultiplier * 0.2
@@ -1551,7 +1551,7 @@ hook.Add("Org Think", "BodyTemperature", function(owner, org, timeValue) -- пе
 	local ownerpos = owner:GetPos()
 	for i, ent in ipairs(ents.FindInSphere(ownerpos, 300)) do
 		local warmingent = warmingEnts[ent:GetClass()]
-		if warmingent then
+		if warmingent and !ent:GetNoDraw() then
 			--org.temperature = org.temperature + timeValue * (warmingEnts[ent:GetClass()] / 50 * (1 - ent:GetPos():Distance(owner:GetPos()) / 200))
 			warming = warming + (isfunction(warmingent) and warmingent(ent) or warmingent)
 		end

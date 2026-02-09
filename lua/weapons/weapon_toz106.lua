@@ -47,6 +47,11 @@ SWEP.AnimsEvents = {
 			self:EmitSound("weapons/tfa_ins2/k98/m40a1_boltback.wav", 45, math_random(110, 115))
 		end,
 		[0.3] = function(self)
+			if !self.noeject then
+				self:RejectShell(self.ShellEject)
+			else
+				self.noeject = false
+			end
 			self:EmitSound("weapons/tfa_ins2/k98/m40a1_boltforward.wav", 45, math_random(110, 115))
 		end,
 		[0.5] = function(self)
@@ -104,6 +109,7 @@ SWEP.weight = 2
 SWEP.weaponInvCategory = 1
 SWEP.CustomShell = "20/70"
 
+SWEP.EjectAng = Angle(-45,0,0)
 SWEP.AutomaticDraw = false
 SWEP.UseCustomWorldModel = false
 SWEP.Primary.ClipSize = 3
@@ -135,7 +141,6 @@ SWEP.availableAttachments = {
 		},
 	},
 }
-
 
 SWEP.addSprayMul = 1
 SWEP.cameraShakeMul = 1
@@ -231,7 +236,7 @@ end
 
 local function cock(self,time)
 	if SERVER then
-		self:Draw(true)
+		self:Draw(true, true)
 	end
 
 	if self:Clip1() == 0 then
@@ -247,7 +252,6 @@ local function cock(self,time)
 	net.Broadcast()
 
 	self.Primary.Next = CurTime() + self.AnimDraw + self.Primary.Wait
-	
 
 	local ply = self:GetOwner()
 
@@ -258,9 +262,10 @@ end
 SWEP.GunCamPos = Vector(6,-12,-5)
 SWEP.GunCamAng = Angle(190,-5,-95)
 
-SWEP.FakeEjectBrassATT = "2"
+SWEP.FakeEjectBrassATT = "4"
 
 function SWEP:Reload(time)
+	--PrintTable(self:GetWM():GetAttachments())
 	--print(self:GetNetVar("shootgunReload",0))
 	local ply = self:GetOwner()
 	--if ply.organism and (ply.organism.larmamputated or ply.organism.rarmamputated) then return end
@@ -307,7 +312,15 @@ function SWEP:ReloadEnd()
 	self:InsertAmmo(self:GetMaxClip1() - self:Clip1() + (self.drawBullet ~= nil and not self.OpenBolt and 1 or 0))
 	--end
 	self.ReloadNext = CurTime() + self.ReloadCooldown --я хуй знает чо это
-	self:Draw()
+	if CLIENT and self.drawBullet == nil then
+		self.noeject = true
+	end
+	if SERVER and self.drawBullet == nil then
+		self:SetNetVar("shootgunReload",CurTime() + 1.3)
+		self:PlayAnim(self.AnimList["cycle"] or "cycle", 1.5, false, nil, false, true)
+	end
+
+	self:Draw(nil,true)
 end
 
 function SWEP:CanPrimaryAttack()
@@ -315,10 +328,6 @@ function SWEP:CanPrimaryAttack()
 end
 
 function SWEP:DrawPost()
-	local wep = self:GetWeaponEntity()
-	if CLIENT and IsValid(wep) then
-		self.shooanim = LerpFT(0.4,self.shooanim or 0,(self:Clip1() < 1 and not self.reload) and 2.3 or self.ReloadSlideOffset)
-	end
 end
 
 function SWEP:ModelCreated(model)
