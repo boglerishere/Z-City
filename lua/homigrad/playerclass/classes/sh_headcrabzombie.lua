@@ -230,63 +230,12 @@ function CLASS.Think(self)
 
 	--\\ Organism stuff
 	local org = self.organism
-	if org.bleed ~= 0 then
-		org.bleed = 0
-	end
-	if org.arteria ~= 0 then
-		org.arteria = 0
-	end
 
-	if org.stamina["max"] ~= 200 then
-		org.stamina["max"] = 200
-	end
-	if org.stamina["range"] ~= 200 then
-		org.stamina["range"] = 200
-	end
-	if org.otrub then
-		org.consciousness = 1
-		org.adrenalineAdd = 4
-		org.analgesia = 0.4
-		--org.needotrub = false
-	end
-	-- org.otrub = false
-	-- org.needotrub = false
-	-- org.incapacitated = false
-	-- org.critical = false
+	hg.organism.Clear(org)
 
-	if org.pain >= 75 then
-		org.painadd = -10
-	end
-
-	if org.pulse <= 60 or org.o2["curregen"] <= 0.3 then
-		org.pulse = 100
-		org.o2["curregen"] = 2
-	end
-
-	-- org.pain = 0
-	-- org.painadd = 0
-	-- org.shock = 0
-	-- org.hurt = 0
-	if org.consciousness <= 0.3 then
-		org.consciousness = 0.9
-		org.needotrub = false
-	end
-
-	if org.jawdislocation ~= false then
-		org.jawdislocation = false
-	end
-	if org.llegdislocation ~= false then
-		org.llegdislocation = false
-	end
-	if org.rlegdislocation ~= false then
-		org.rlegdislocation = false
-	end
-	if org.larmdislocation ~= false then
-		org.larmdislocation = false
-	end
-	if org.rarmdislocation ~= false then
-		org.rarmdislocation = false
-	end
+	org.stamina["max"] = 200
+	org.stamina["range"] = 200
+	org.o2["curregen"] = 2
 end
 
 --// Phrase stuff

@@ -1551,7 +1551,7 @@ hook.Add("Org Think", "BodyTemperature", function(owner, org, timeValue) -- пе
 	local ownerpos = owner:GetPos()
 	for i, ent in ipairs(ents.FindInSphere(ownerpos, 300)) do
 		local warmingent = warmingEnts[ent:GetClass()]
-		if warmingent then
+		if warmingent and !ent:GetNoDraw() then
 			--org.temperature = org.temperature + timeValue * (warmingEnts[ent:GetClass()] / 50 * (1 - ent:GetPos():Distance(owner:GetPos()) / 200))
 			warming = warming + (isfunction(warmingent) and warmingent(ent) or warmingent)
 		end
