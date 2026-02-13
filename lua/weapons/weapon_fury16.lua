@@ -2,7 +2,7 @@ if SERVER then AddCSLuaFile() end
 SWEP.Base = "weapon_bandage_sh"
 SWEP.PrintName = "'Uber' Norepinephrine"
 SWEP.Instructions = "An experimental combat stimulant refined from early Fury-13 samples with uncertain origin, nicknamed as 'Fury-16'.\n\nInstead of modifying your body, it forces it to burn through every resource for a massive speed boost. Functions by flooding the system with synthetic noradrenaline, inducing extreme vasoconstriction and cardiac output."
-SWEP.Category = "ZCity Other"
+SWEP.Category = "ZCity Medicine"
 SWEP.Spawnable = true
 SWEP.Primary.Wait = 1
 SWEP.Primary.Next = 0
@@ -89,6 +89,10 @@ if SERVER then
 		entOwner:EmitSound("snd_jack_hmcd_needleprick.wav", 80, math.random(115, 120))
 
 		if org.berserk >= 0.4 then
+			ent:Kill()
+		end
+
+		if org.noradrenaline >= 1.8 then
 			ent:Kill()
 		end
 
